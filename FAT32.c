@@ -825,7 +825,8 @@ static DirectoryIteratorEntry* findPath(Fat32Context* cont, const char* path, ui
 
 void fat32Format(Fat32Context* context,const char* diskName)
 {
-    context = fat32OpenFile(diskName);
+    context = fat32Create(diskName);
+    printf("Disk succesfully formated\n.");
 }
 
 
@@ -842,9 +843,13 @@ void fat32CreateDirectoryEntry(Fat32Context* cont, const char* currentFolder,con
     }
     else
     {
+        currentFolder++;
         DirectoryIteratorEntry* found = fat32OpenFile(cont, currentFolder);
-        address = directoryEntryGetDataAddress(cont, found->entry);
-        directoryIteratorEntryFree(&found);
+        if(found)
+        {
+            address = directoryEntryGetDataAddress(cont, found->entry);
+            directoryIteratorEntryFree(&found);
+        }
     }
 
     DirectoryIterator* iterator = directoryIteratorNew(address);
